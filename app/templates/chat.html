@@ -1,0 +1,122 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="{{ url_for('static', filename ='js/chat.js') }}"></script>
+<link rel="stylesheet" href="../static/css/style.css">
+<!------ Include the above in your HEAD tag ---------->
+
+
+<body ng-app="smoltalk" ng-controller="chat" ng-init="username = '{{ username }}';message_list; active_friend; users = {{ users }}; base_url ='{{ base_url }}'">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Smoltalk</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="user in users" ng-if="user.username !== username">
+                        <a ng-bind="user.username" ng-click="load_user(user)"></a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href=" {{ url_for('logout') }}">
+                            <span class="glyphicon glyphicon-user"></span> Log Out</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid">
+
+        <div class="row">
+
+
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading" id="accordion">
+                        <span class="glyphicon glyphicon-comment"></span>
+                        <p ng-bind="active_friend"></p>
+
+                    </div>
+
+                    <div class="panel-body">
+                        <ul class="chat">
+                            <li ng-repeat="message in messages track by $index">
+                                <div ng-if="message.from_id === active_friend" class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong ng-bind="message.from_id" class="primary-font"> </strong>
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                        </div>
+                                        <p ng-bind="message.body">
+
+                                        </p>
+                                    </div>
+                                </div>
+
+
+                                <div ng-if="message.from_id === username" class="right clearfix">
+                                    <span class="chat-img pull-right">
+                                        <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                                    </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>13 mins ago</small>
+                                            <strong ng-bind="message.from_id" class="pull-right primary-font"></strong>
+                                        </div>
+                                        <p ng-bind="message.body">
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            <input id="btn-input" type="text" class="form-control input-sm" ng-init="message" ng-model="message" placeholder="Type your message here..."
+                            />
+                            <span class="input-group-btn">
+                                <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="send_message(message)">
+                                    Send</button>
+
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <body>
+        <html>
